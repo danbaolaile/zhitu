@@ -140,7 +140,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <div class="search-card">
   <h2>📋 输入信息</h2>
   <div class="form-row"><label>省份</label><select v-model="form.province"><option value="">请选择</option><option v-for="p in provinces" :key="p" :value="p">{{ p }}</option></select></div>
-  <div class="inline-row"><div class="form-row"><label>高考总分 <span v-if="estRank" style="font-weight:400;color:#e8794b;font-size:.7rem">→ 估约全省第 {{ estRank.toLocaleString() }} 名</span></label><input type="number" v-model.number="form.score" placeholder="如 642"></div><div class="form-row"><label>全省位次</label><input type="number" v-model.number="form.rank" placeholder="如 4500"></div></div>
+  <div class="inline-row"><div class="form-row"><label>高考总分 <span v-if="estRank" style="font-weight:400;color:#e8794b;font-size:.7rem">→ 估约全省第 {{ estRank.toLocaleString() }} 名</span></label><input type="number" v-model.number="form.score" placeholder="如 642"><a :href="'https://www.baidu.com/s?wd='+encodeURIComponent(form.province+' 2025 一分一段表')" target="_blank" style="display:inline-block;margin-top:4px;font-size:.65rem;color:#9ca3af;text-decoration:underline">📊 查看{{ form.province||'本省' }}官方一分一段表 →</a>></div><div class="form-row"><label>全省位次</label><input type="number" v-model.number="form.rank" placeholder="如 4500"></div></div>
   <div class="form-row"><label>选考科目（点选3门）</label><div class="subject-chips"><span v-for="s in allSubjects" :key="s" :class="['subject-chip',{on:form.subjects.includes(s)}]" @click="toggleSubject(s)">{{ s }}</span></div></div>
   <button class="search-btn" @click="doSearch" :disabled="!canSearch">🔍 开始智能匹配</button>
 </div>
