@@ -11,12 +11,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .header{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);color:#fff;padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.15);text-align:center}
 .header .logo{font-size:1.1rem;font-weight:800}.header .logo span{background:linear-gradient(135deg,#e8794b,#e85070);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .container{max-width:700px;margin:0 auto;padding:0 16px 40px}
-.hero{padding:28px 20px 20px;text-align:center}
-.hero h1{font-size:1.5rem;font-weight:800}.hero h1 em{font-style:normal;background:linear-gradient(135deg,#e8794b,#e85070);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:#6b7280;font-size:.85rem;margin:6px 0 14px}
+.hero{padding:32px 16px 24px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;left:-80px;width:260px;height:260px;background:radial-gradient(circle,rgba(232,121,75,.12),transparent 70%);border-radius:50%;pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(232,80,112,.08),transparent 70%);border-radius:50%;pointer-events:none}
+.hero h1{font-size:1.6rem;font-weight:900;letter-spacing:-.01em;position:relative}.hero h1 em{font-style:normal;background:linear-gradient(135deg,#e8794b,#e85070);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#6b7280;font-size:.85rem;margin:6px 0 16px;position:relative}
 .hero-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .hero-stat{background:#fff;border-radius:14px;padding:10px 16px;box-shadow:0 2px 12px rgba(0,0,0,.04);text-align:center;min-width:70px}
 .hero-stat .num{font-size:1.2rem;font-weight:800;color:#1a1a2e}.hero-stat .lbl{font-size:.65rem;color:#9ca3af}
+.demo-btn{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,#e8794b,#e85070);color:#fff;border:none;border-radius:24px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;box-shadow:0 4px 16px rgba(232,121,75,.3);transition:.2s;animation:shimmer 2s ease-in-out infinite;background-size:200% 200%}
+@keyframes shimmer{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+.demo-btn:hover{transform:scale(1.04);box-shadow:0 6px 24px rgba(232,121,75,.45)}
 .search-card{background:#fff;border-radius:18px;padding:20px 16px;box-shadow:0 2px 20px rgba(0,0,0,.06);margin-bottom:16px}
 .search-card h2{font-size:1rem;margin-bottom:12px}
 .form-row{margin-bottom:10px}
@@ -34,10 +39,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .action-bar button{padding:6px 13px;border:2px solid #e5e7eb;border-radius:20px;font-size:.74rem;font-weight:600;cursor:pointer;background:#fff;transition:.15s;font-family:inherit;color:#374151}
 .action-bar button:hover{border-color:#e8794b;color:#e8794b}.action-bar button.active{background:#e8794b;color:#fff;border-color:#e8794b}
 .search-input{padding:5px 10px;border:2px solid #e5e7eb;border-radius:20px;font-size:.74rem;font-family:inherit;outline:none;width:110px;transition:.2s}.search-input:focus{border-color:#e8794b;width:150px}
-.school-card{background:#fff;border-radius:16px;padding:14px 14px 10px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.05);transition:.2s;position:relative;overflow:hidden;animation:cardIn .4s ease backwards;border-left:4px solid #e5e7ea}
-.school-card:nth-child(1){animation-delay:0s}.school-card:nth-child(2){animation-delay:.04s}.school-card:nth-child(3){animation-delay:.08s}.school-card:nth-child(4){animation-delay:.12s}.school-card:nth-child(5){animation-delay:.16s}.school-card:nth-child(n+6){animation-delay:.2s}
-@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.school-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
+.school-card{background:#fff;border-radius:18px;padding:14px 14px 10px;margin-bottom:10px;box-shadow:0 2px 12px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;animation:cardIn .4s ease backwards;border-left:5px solid #e5e7ea}
+.school-card:nth-child(1){animation-delay:0s}.school-card:nth-child(2){animation-delay:.06s}.school-card:nth-child(3){animation-delay:.12s}.school-card:nth-child(4){animation-delay:.18s}.school-card:nth-child(5){animation-delay:.24s}.school-card:nth-child(n+6){animation-delay:.3s}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.school-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);transform:translateY(-3px)}
 .school-card.fav{border-color:#f59e0b;border-left-color:#f59e0b;box-shadow:0 0 0 1px rgba(245,158,11,.2)}
 .school-card.rush{border-left-color:#e85070}.school-card.stable{border-left-color:#f0a030}.school-card.safe{border-left-color:#30a060}
 .card-row{display:flex;gap:10px;align-items:flex-start}
@@ -117,7 +122,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <div v-if="!searched" class="hero">
   <h1>选对大学，<em>人生开挂</em></h1>
   <p>120所一本大学智能匹配 · 宿舍/生活画像 · 四年花费</p>
-  <div class="hero-stats">
+  <button class="demo-btn" @click="quickDemo" v-if="!searched">✨ 快速体验 · 湖北 642 分</button>
+<div class="hero-stats">
     <div class="hero-stat"><div class="num">{{ allSchools.length }}</div><div class="lbl">一本院校</div></div>
     <div class="hero-stat"><div class="num">31省</div><div class="lbl">分省适配</div></div>
     <div class="hero-stat"><div class="num">🍜</div><div class="lbl">生活指数</div></div>
@@ -234,7 +240,8 @@ createApp({
   },
   methods:{
     async init(){try{const r=await fetch('schools.json');if(r.ok){const slim=await r.json();this.allSchools=slim.map(expandSchool)}}catch(e){console.log('schools.json not loaded')}},
-    toggleSubject(s){const i=this.form.subjects.indexOf(s);if(i>=0)this.form.subjects.splice(i,1);else if(this.form.subjects.length<3)this.form.subjects.push(s)},
+    quickDemo(){this.form={province:'湖北',score:642,rank:4500,subjects:['物理','化学','生物']};this.doSearch()},
+toggleSubject(s){const i=this.form.subjects.indexOf(s);if(i>=0)this.form.subjects.splice(i,1);else if(this.form.subjects.length<3)this.form.subjects.push(s)},
     doSearch(){
       if(!this.canSearch||!this.allSchools.length)return;this.userScore=this.form.score;this.searched=true;this.filter='all';this.searchText='';
       let list=this.allSchools.filter(s=>Math.abs(s.predicted-this.form.score)<=55);
