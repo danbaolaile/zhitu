@@ -69,9 +69,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .score-legends{display:flex;justify-content:space-between;font-size:.62rem;color:#c4c4c4;margin-top:1px}
 .majors{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
 .major-tag{padding:2px 7px;background:#eef2ff;color:#c4562e;border-radius:10px;font-size:.67rem;font-weight:600}
-.life-strip{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.life-strip{display:none}
 .life-dot{display:inline-flex;align-items:center;gap:2px;font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap}
 .life-dot.hi{background:#ecfdf5;color:#059669}.life-dot.md{background:#fef5e7;color:#d97706}.life-dot.lo{background:#fef2f2;color:#e85070}
+/* 卡片内置生活指数条 */
+.life-bar-inline{display:flex;gap:0;margin:6px 0;border-radius:10px;overflow:hidden;border:1px solid #f3f4f6}
+.lbi-item{flex:1;text-align:center;padding:5px 2px;background:#fafafa}
+.lbi-item+.lbi-item{border-left:1px solid #f3f4f6}
+.lbi-val{display:block;font-weight:800;font-size:.82rem;color:#2d2420}
+.lbi-lbl{display:block;font-size:.58rem;color:#9ca3af;margin-top:1px}
 .card-foot{display:flex;justify-content:space-between;align-items:center;font-size:.7rem;color:#9ca3af;padding-top:6px;border-top:1px solid #f3f4f6;gap:3px}
 .card-foot .link{color:#e8794b;cursor:pointer;font-weight:600;font-size:.68rem}.card-foot .link:hover{text-decoration:underline}
 .fav-star{cursor:pointer;font-size:1rem;user-select:none;transition:.15s}.fav-star.on{color:#f59e0b}
@@ -156,11 +162,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
       <div class="tags"><span v-if="s.is985" class="tag tag-985">985</span><span v-if="s.is211" class="tag tag-211">211</span><span v-if="s.isDoubleFirstClass" class="tag tag-985">双一流</span><span class="tag tag-city">{{ s.province }}</span></div>
       <div class="score-bar"><div class="score-nums"><span class="sch">🏫 {{ s.predicted }}分</span><span :class="['gap',s._gapCls]">{{ s._gapText }}</span><span class="usr">👤 {{ userScore }}分</span></div><div class="score-track-wrap"><div :class="['score-fill-bar',s.level]" :style="{width:s._fillPct+'%'}"></div><div class="score-mid-mark" :style="{left:s._midMark+'%'}"></div></div><div class="score-legends"><span>学校预估线</span><span>你的位置</span></div></div>
       <div class="majors"><span class="major-tag" v-for="m in (s.majors||[]).slice(0,4)" :key="m">{{ m }}</span></div>
-      <div class="life-strip" v-if="s._life">
-        <span :class="['life-dot',s._life.ca>=4?'hi':s._life.ca>=3?'md':'lo']">🍜 {{ s._life.ca }}</span>
-        <span :class="['life-dot',s._life.mc<=1500?'hi':s._life.mc<=2000?'md':'lo']">💰 ¥{{ s._life.mc }}</span>
-        <span :class="['life-dot',s._life.tr>=4?'hi':s._life.tr>=3?'md':'lo']">🚇 {{ '★'.repeat(s._life.tr) }}</span>
-        <span :class="['life-dot',s._life.io>=4?'hi':s._life.io>=3?'md':'lo']">💼 {{ '★'.repeat(s._life.io) }}</span>
+      <div class="life-bar-inline" v-if="s._life">
+        <div class="lbi-item"><span class="lbi-val">{{ s.dormRating||'?' }}</span><span class="lbi-lbl">宿舍评分</span></div>
+        <div class="lbi-item"><span class="lbi-val">{{ s._life.ca||'?' }}</span><span class="lbi-lbl">食堂</span></div>
+        <div class="lbi-item"><span class="lbi-val">¥{{ s._life.mc||'?' }}</span><span class="lbi-lbl">月生活费</span></div>
+        <div class="lbi-item"><span class="lbi-val">{{ s._life.gr||'?' }}</span><span class="lbi-lbl">男女比</span></div>
       </div>
       <div class="card-foot">
         <span>🏠 {{ s.dormRating||'--' }}分</span><span>{{ s._dorm?.ac?'❄️':'' }} {{ s._dorm?.ba||'--' }}</span>
