@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>志途 · 高考志愿助手</title>
+<meta name="description" content="120所一本大学智能匹配，宿舍条件+生活画像+四年花费，帮你填好志愿">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f0f2ff;color:#1a1a2e;line-height:1.6;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);color:#fff;padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.15);text-align:center}
+.header .logo{font-size:1.1rem;font-weight:800}.header .logo span{background:linear-gradient(135deg,#667eea,#e85070);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.container{max-width:700px;margin:0 auto;padding:0 16px 40px}
+.hero{padding:28px 20px 20px;text-align:center}
+.hero h1{font-size:1.5rem;font-weight:800}.hero h1 em{font-style:normal;background:linear-gradient(135deg,#667eea,#e85070);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#6b7280;font-size:.85rem;margin:6px 0 14px}
+.hero-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero-stat{background:#fff;border-radius:14px;padding:10px 16px;box-shadow:0 2px 12px rgba(0,0,0,.04);text-align:center;min-width:70px}
+.hero-stat .num{font-size:1.2rem;font-weight:800;color:#1a1a2e}.hero-stat .lbl{font-size:.65rem;color:#9ca3af}
+.search-card{background:#fff;border-radius:18px;padding:20px 16px;box-shadow:0 2px 20px rgba(0,0,0,.06);margin-bottom:16px}
+.search-card h2{font-size:1rem;margin-bottom:12px}
+.form-row{margin-bottom:10px}
+.form-row label{display:block;font-size:.76rem;font-weight:700;color:#374151;margin-bottom:3px}
+.form-row select,.form-row input{width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:12px;font-size:.9rem;font-family:inherit;background:#f9fafb;outline:none;transition:.2s;color:#1a1a2e}
+.form-row select:focus,.form-row input:focus{border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1);background:#fff}
+.inline-row{display:flex;gap:8px}.inline-row .form-row{flex:1}
+.subject-chips{display:flex;gap:6px;flex-wrap:wrap}
+.subject-chip{padding:6px 14px;border:2px solid #e5e7eb;border-radius:20px;font-size:.8rem;cursor:pointer;user-select:none;background:#f9fafb;transition:.15s;font-weight:600;color:#6b7280}
+.subject-chip:hover{border-color:#667eea;color:#667eea}.subject-chip.on{background:#667eea;color:#fff;border-color:#667eea}
+.search-btn{width:100%;padding:13px;margin-top:4px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:.25s;box-shadow:0 6px 24px rgba(102,126,234,.35)}
+.search-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(102,126,234,.45)}.search-btn:active{transform:scale(.97)}.search-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.action-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.action-bar .count{font-weight:700;font-size:.92rem;margin-right:auto}
+.action-bar button{padding:6px 13px;border:2px solid #e5e7eb;border-radius:20px;font-size:.74rem;font-weight:600;cursor:pointer;background:#fff;transition:.15s;font-family:inherit;color:#374151}
+.action-bar button:hover{border-color:#667eea;color:#667eea}.action-bar button.active{background:#667eea;color:#fff;border-color:#667eea}
+.search-input{padding:5px 10px;border:2px solid #e5e7eb;border-radius:20px;font-size:.74rem;font-family:inherit;outline:none;width:110px;transition:.2s}.search-input:focus{border-color:#667eea;width:150px}
+.school-card{background:#fff;border-radius:16px;padding:14px 14px 10px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.05);transition:.2s;position:relative;overflow:hidden;animation:cardIn .4s ease backwards;border-left:4px solid #e5e7ea}
+.school-card:nth-child(1){animation-delay:0s}.school-card:nth-child(2){animation-delay:.04s}.school-card:nth-child(3){animation-delay:.08s}.school-card:nth-child(4){animation-delay:.12s}.school-card:nth-child(5){animation-delay:.16s}.school-card:nth-child(n+6){animation-delay:.2s}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.school-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
+.school-card.fav{border-color:#f59e0b;border-left-color:#f59e0b;box-shadow:0 0 0 1px rgba(245,158,11,.2)}
+.school-card.rush{border-left-color:#e85070}.school-card.stable{border-left-color:#f0a030}.school-card.safe{border-left-color:#30a060}
+.card-row{display:flex;gap:10px;align-items:flex-start}
+.card-img{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f3f4f6}
+.card-main{flex:1;min-width:0}
+.card-top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:2px}
+.school-name{font-size:.95rem;font-weight:800}.school-sub{font-size:.7rem;color:#9ca3af;margin-top:1px}
+.tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.tag{padding:1px 6px;border-radius:4px;font-size:.62rem;font-weight:700}
+.tag-985{background:#fef3c7;color:#92400e}.tag-211{background:#dbeafe;color:#1e40af}.tag-city{background:#f3f4f6;color:#6b7280}
+.level-badge{padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;white-space:nowrap;flex-shrink:0}
+.level-badge.rush{background:#fde8ed;color:#e85070}.level-badge.stable{background:#fef5e7;color:#d97706}.level-badge.safe{background:#e8f5ef;color:#059669}
+.score-bar{margin:6px 0 3px}
+.score-nums{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.score-nums .sch{font-weight:700;font-size:.78rem;color:#9ca3af}.score-nums .usr{font-weight:800;font-size:.9rem;color:#667eea}
+.gap{font-weight:800;font-size:.74rem;padding:2px 7px;border-radius:6px}
+.gap-rush{background:#fde8ed;color:#e85070}.gap-stable{background:#fef5e7;color:#d97706}.gap-safe{background:#e8f5ef;color:#059669}
+.score-track-wrap{position:relative;height:8px;background:#f3f4f6;border-radius:4px;overflow:hidden}
+.score-fill-bar{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1);position:absolute;left:0;top:0}
+.score-fill-bar.rush{background:linear-gradient(90deg,#fca5a5,#e85070)}.score-fill-bar.stable{background:linear-gradient(90deg,#fcd34d,#f0a030)}.score-fill-bar.safe{background:linear-gradient(90deg,#6ee7b7,#30a060)}
+.score-mid-mark{position:absolute;top:-3px;bottom:-3px;width:3px;background:#1a1a2e;z-index:2;border-radius:2px}
+.score-mid-mark::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #1a1a2e;box-shadow:0 2px 6px rgba(0,0,0,.3);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.3)}50%{box-shadow:0 2px 16px rgba(0,0,0,.5)}}
+.score-legends{display:flex;justify-content:space-between;font-size:.62rem;color:#c4c4c4;margin-top:1px}
+.majors{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.major-tag{padding:2px 7px;background:#eef2ff;color:#4f46e5;border-radius:10px;font-size:.67rem;font-weight:600}
+.life-strip{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.life-dot{display:inline-flex;align-items:center;gap:2px;font-size:.64rem;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap}
+.life-dot.hi{background:#ecfdf5;color:#059669}.life-dot.md{background:#fef5e7;color:#d97706}.life-dot.lo{background:#fef2f2;color:#e85070}
+.card-foot{display:flex;justify-content:space-between;align-items:center;font-size:.7rem;color:#9ca3af;padding-top:6px;border-top:1px solid #f3f4f6;gap:3px}
+.card-foot .link{color:#667eea;cursor:pointer;font-weight:600;font-size:.68rem}.card-foot .link:hover{text-decoration:underline}
+.fav-star{cursor:pointer;font-size:1rem;user-select:none;transition:.15s}.fav-star.on{color:#f59e0b}
+.dorm-panel{margin-top:8px;padding:10px;background:#f9fafb;border-radius:12px;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.dorm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.dorm-item{font-size:.7rem;display:flex;align-items:center;gap:3px;color:#6b7280}.dorm-item b{font-weight:600;color:#1a1a2e}
+.dorm-desc{font-size:.7rem;color:#9ca3af;margin-top:6px;line-height:1.5}
+.life-panel{margin-top:8px;padding:10px;background:linear-gradient(135deg,#f9fafb,#f0f2ff);border-radius:12px;animation:fadeIn .2s ease;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.life-radar{flex-shrink:0}.life-detail{flex:1;min-width:120px}
+.life-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;font-size:.7rem}
+.life-row .ico{width:16px;text-align:center}.life-row .lbl{color:#6b7280;width:36px;flex-shrink:0}.life-row .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.life-row .val{font-weight:700;color:#1a1a2e}
+.senior-quote{font-size:.68rem;color:#667eea;font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid #e5e7eb}
+.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:999;display:flex;align-items:flex-end;justify-content:center}
+.modal-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:700px;max-height:85vh;overflow-y:auto;padding:22px 18px 28px;animation:slideUp2 .3s ease}
+@keyframes slideUp2{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-close{position:sticky;top:0;float:right;width:30px;height:30px;border-radius:50%;border:none;background:#f3f4f6;font-size:1rem;cursor:pointer;z-index:2}
+.detail-hero{padding:24px 16px;border-radius:16px;text-align:center;margin-bottom:10px;color:#fff}
+.detail-hero-name{font-size:1.3rem;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.2)}.detail-hero-sub{font-size:.74rem;opacity:.85;margin-top:3px}
+.detail-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.dstat{background:#f9fafb;border-radius:10px;padding:8px 4px;text-align:center}.dstat-num{display:block;font-size:.88rem;font-weight:800;color:#1a1a2e}.dstat-lbl{font-size:.6rem;color:#9ca3af}
+.modal-section{margin-top:14px}.modal-section h3{font-size:.84rem;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #e5e7eb}
+.modal-section p{font-size:.78rem;line-height:1.7}
+.social-links{display:flex;gap:5px;flex-wrap:wrap}
+.social-btn{flex:1;min-width:90px;padding:8px;border:none;border-radius:12px;font-weight:700;font-size:.72rem;cursor:pointer;text-align:center;text-decoration:none;font-family:inherit;transition:.15s;color:#fff}
+.social-btn.xhs{background:linear-gradient(135deg,#ff2442,#ff6b81)}.social-btn.dy{background:#111}.social-btn.wb{background:linear-gradient(135deg,#ff8200,#ffb347)}
+.cost-calc{background:linear-gradient(135deg,#fef3c7,#fef5e7);border-radius:12px;padding:14px;margin-top:10px}
+.cost-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:.78rem}
+.cost-total{font-size:1.2rem;font-weight:800;color:#d97706;text-align:center;margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,.06)}.cost-note{font-size:.64rem;color:#9ca3af;text-align:center;margin-top:3px}
+.bag-list{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px}
+.bag-item{font-size:.7rem;padding:5px 8px;background:#f0fdf4;border-radius:8px;display:flex;align-items:center;gap:3px}.bag-item.special{background:#fef3c7}
+.th-input-wrap{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.th-input{flex:1;min-width:180px;padding:8px 10px;border:2px solid #e5e7eb;border-radius:10px;font-size:.78rem;font-family:inherit;resize:none;outline:none;height:42px}.th-input:focus{border-color:#667eea}
+.th-submit{padding:8px 16px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.76rem}
+.th-post{background:#fff;border-radius:10px;padding:10px;margin-bottom:6px;box-shadow:0 1px 3px rgba(0,0,0,.03)}.th-post .th-time{font-size:.62rem;color:#c4c4c4;margin-bottom:2px}.th-post .th-text{font-size:.8rem;line-height:1.5;white-space:pre-wrap}
+.footer{text-align:center;padding:24px 16px;font-size:.66rem;color:#d1d5db}
+@media(max-width:480px){.hero-stats{gap:8px}.hero-stat{padding:8px 10px;min-width:55px}.hero-stat .num{font-size:1rem}.card-img{width:46px;height:46px}.dorm-grid{grid-template-columns:1fr 1fr}.school-name{font-size:.88rem}.life-panel{flex-direction:column}.detail-stats{grid-template-columns:1fr 1fr}.bag-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header"><div class="logo">🎓 <span>志途</span> · 高考志愿助手</div></div>
+<div class="container" id="app">
+
+<div v-if="!searched" class="hero">
+  <h1>选对大学，<em>人生开挂</em></h1>
+  <p>120所一本大学智能匹配 · 宿舍/生活画像 · 四年花费</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">{{ allSchools.length }}</div><div class="lbl">一本院校</div></div>
+    <div class="hero-stat"><div class="num">31省</div><div class="lbl">分省适配</div></div>
+    <div class="hero-stat"><div class="num">🍜</div><div class="lbl">生活指数</div></div>
+    <div class="hero-stat"><div class="num">💬</div><div class="lbl">校友说</div></div>
+  </div>
+</div>
+
+<div class="search-card">
+  <h2>📋 输入信息</h2>
+  <div class="form-row"><label>省份</label><select v-model="form.province"><option value="">请选择</option><option v-for="p in provinces" :key="p" :value="p">{{ p }}</option></select></div>
+  <div class="inline-row"><div class="form-row"><label>高考总分</label><input type="number" v-model.number="form.score" placeholder="如 642"></div><div class="form-row"><label>全省位次</label><input type="number" v-model.number="form.rank" placeholder="如 4500"></div></div>
+  <div class="form-row"><label>选考科目（点选3门）</label><div class="subject-chips"><span v-for="s in allSubjects" :key="s" :class="['subject-chip',{on:form.subjects.includes(s)}]" @click="toggleSubject(s)">{{ s }}</span></div></div>
+  <button class="search-btn" @click="doSearch" :disabled="!canSearch">🔍 开始智能匹配</button>
+</div>
+
+<div v-if="results.length" class="action-bar">
+  <span class="count">{{ filteredResults.length }} 所</span>
+  <input class="search-input" v-model="searchText" placeholder="搜学校...">
+  <button :class="{active:filter==='all'}" @click="filter='all'">全部</button>
+  <button :class="{active:filter==='rush'}" @click="filter='rush'">冲刺</button>
+  <button :class="{active:filter==='stable'}" @click="filter='stable'">稳妥</button>
+  <button :class="{active:filter==='safe'}" @click="filter='safe'">保底</button>
+</div>
+
+<div v-for="s in filteredResults" :key="s.id" :class="['school-card',s.level,{fav:s.fav}]">
+  <div class="card-row">
+    <img v-if="s._img" :src="s._img" class="card-img" :alt="s.name" @error="s._img=''">
+    <div class="card-main">
+      <div class="card-top-row"><div><div class="school-name">{{ s.name }}</div><div class="school-sub">{{ s.city }} · {{ s.cityTier }}城市</div></div><span :class="['level-badge',s.level]">{{ s.level==='rush'?'🚀 冲刺':s.level==='stable'?'⚖️ 稳妥':'🛡️ 保底' }}</span></div>
+      <div class="tags"><span v-if="s.is985" class="tag tag-985">985</span><span v-if="s.is211" class="tag tag-211">211</span><span v-if="s.isDoubleFirstClass" class="tag tag-985">双一流</span><span class="tag tag-city">{{ s.province }}</span></div>
+      <div class="score-bar"><div class="score-nums"><span class="sch">🏫 {{ s.predicted }}分</span><span :class="['gap',s._gapCls]">{{ s._gapText }}</span><span class="usr">👤 {{ userScore }}分</span></div><div class="score-track-wrap"><div :class="['score-fill-bar',s.level]" :style="{width:s._fillPct+'%'}"></div><div class="score-mid-mark" :style="{left:s._midMark+'%'}"></div></div><div class="score-legends"><span>学校预估线</span><span>你的位置</span></div></div>
+      <div class="majors"><span class="major-tag" v-for="m in (s.majors||[]).slice(0,4)" :key="m">{{ m }}</span></div>
+      <div class="life-strip" v-if="s._life">
+        <span :class="['life-dot',s._life.ca>=4?'hi':s._life.ca>=3?'md':'lo']">🍜 {{ s._life.ca }}</span>
+        <span :class="['life-dot',s._life.mc<=1500?'hi':s._life.mc<=2000?'md':'lo']">💰 ¥{{ s._life.mc }}</span>
+        <span :class="['life-dot',s._life.tr>=4?'hi':s._life.tr>=3?'md':'lo']">🚇 {{ '★'.repeat(s._life.tr) }}</span>
+        <span :class="['life-dot',s._life.io>=4?'hi':s._life.io>=3?'md':'lo']">💼 {{ '★'.repeat(s._life.io) }}</span>
+      </div>
+      <div class="card-foot">
+        <span>🏠 {{ s.dormRating||'--' }}分</span><span>{{ s._dorm?.ac?'❄️':'' }} {{ s._dorm?.ba||'--' }}</span>
+        <span class="fav-star" :class="{on:s.fav}" @click.stop="s.fav=!s.fav">{{ s.fav?'★':'☆' }}</span>
+        <span class="link" @click.stop="s._showDorm=!s._showDorm">{{ s._showDorm?'收起':'宿舍' }}</span>
+        <span class="link" @click.stop="s._showLife=!s._showLife">{{ s._showLife?'收起':'生活画像' }}</span>
+        <span class="link" @click.stop="openDetail(s)">详情 →</span>
+      </div>
+      <div class="dorm-panel" v-if="s._showDorm&&s._dorm"><div class="dorm-grid"><div class="dorm-item">❄️ <b>{{ s._dorm.ac?'✓':'✗' }}</b></div><div class="dorm-item">🚿 <b>{{ s._dorm.ba||'--' }}</b></div><div class="dorm-item">🔥 <b>{{ s._dorm.ho?'✓':'✗' }}</b></div><div class="dorm-item">🛏️ <b>{{ s._dorm.be||'--' }}</b></div><div class="dorm-item">🌐 <b>{{ s._dorm.ne||'--' }}</b></div><div class="dorm-item">🪟 <b>{{ s._dorm.bl?'✓':'✗' }}</b></div></div><div class="dorm-desc" v-if="s._dorm.de">{{ s._dorm.de }}</div></div>
+      <div class="life-panel" v-if="s._showLife&&s._life">
+        <svg width="100" height="100" viewBox="0 0 140 140"><polygon v-for="lv in [1,2,3,4,5]" :key="lv" :points="gridPts(lv*18)" fill="none" stroke="#e5e7eb" stroke-width="1"/><line v-for="(_,i) in 5" :key="'l'+i" x1="70" y1="70" :x2="70+55*Math.cos(-Math.PI/2+i*2*Math.PI/5)" :y2="70+55*Math.sin(-Math.PI/2+i*2*Math.PI/5)" stroke="#e5e7eb" stroke-width="1"/><polygon :points="radarPts(s)" fill="rgba(102,126,234,.15)" stroke="#667eea" stroke-width="2"/><circle v-for="(p,i) in radarDots(s)" :key="'d'+i" :cx="p[0]" :cy="p[1]" r="4" fill="#667eea" stroke="#fff" stroke-width="2"/></svg>
+        <div class="life-detail"><div class="life-row" v-for="d in dimLabels(s)" :key="d[0]"><span class="ico">{{ d[0] }}</span><span class="lbl">{{ d[1] }}</span><span class="dot" :style="{background:d[3]}"></span><span class="val">{{ d[2] }}</span></div><div class="senior-quote" v-if="s._life.ss">💬 {{ s._life.ss }}</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal-mask" v-if="detail" @click.self="detail=null"><div class="modal-box">
+  <button class="modal-close" @click="detail=null">✕</button>
+  <div class="detail-hero" :style="{background:heroBg(detail)}"><div class="detail-hero-name">{{ detail.name }}</div><div class="detail-hero-sub">{{ detail.city }} · {{ detail.cityTier }}城市</div><div class="tags" style="justify-content:center;margin-top:6px"><span v-if="detail.is985" class="tag tag-985">985</span><span v-if="detail.is211" class="tag tag-211">211</span><span v-if="detail.isDoubleFirstClass" class="tag tag-985">双一流</span></div></div>
+  <div class="detail-stats"><div class="dstat"><span class="dstat-num">{{ detail.predicted }}</span><span class="dstat-lbl">预估分</span></div><div class="dstat"><span class="dstat-num">¥{{ detail.tuition||'--' }}</span><span class="dstat-lbl">学费/年</span></div><div class="dstat"><span class="dstat-num">{{ detail.dormRating||'--' }}</span><span class="dstat-lbl">宿舍评分</span></div><div class="dstat"><span class="dstat-num">{{ detail.cityTier }}</span><span class="dstat-lbl">城市等级</span></div></div>
+  <div class="modal-section"><h3>📱 看真实校园</h3><div class="social-links"><a :href="'https://www.xiaohongshu.com/search_result?keyword='+encodeURIComponent(detail.name+' 校园')" target="_blank" class="social-btn xhs">📕 小红书</a><a :href="'https://www.douyin.com/search/'+encodeURIComponent(detail.name+' 大学')" target="_blank" class="social-btn dy">🎵 抖音</a><a :href="'https://s.weibo.com/weibo?q='+encodeURIComponent(detail.name+' 大学')" target="_blank" class="social-btn wb">📢 微博</a></div></div>
+  <div class="modal-section"><h3>💰 四年总花费</h3><div class="cost-calc"><div class="cost-row"><span>学费</span><span>¥{{ (detail.tuition||5000)*4 }}</span></div><div class="cost-row"><span>生活费</span><span>¥{{ (detail._life?.mc||1500)*40 }}</span></div><div class="cost-row"><span>住宿+杂费</span><span>¥12,800</span></div><div class="cost-total">≈ ¥{{ ((detail.tuition||5000)*4+(detail._life?.mc||1500)*40+12800).toLocaleString() }}</div><div class="cost-note">四年总花费（含生活费）实际因人而异</div></div></div>
+  <div class="modal-section"><h3>🎒 行李清单</h3><div class="bag-list"><div class="bag-item">📜 录取通知书</div><div class="bag-item">📷 证件照</div><div class="bag-item">🛏️ 床上用品</div><div class="bag-item">🧴 洗漱用品</div><div class="bag-item">💊 常用药品</div><div class="bag-item">💻 笔记本电脑</div><div class="bag-item special" v-if="needW(detail)">🧥 羽绒服+保暖衣</div><div class="bag-item special" v-if="needR(detail)">☔ 雨伞+除湿盒</div><div class="bag-item special" v-if="needS(detail)">🌞 防晒霜+凉席</div></div></div>
+  <div class="modal-section" v-if="detail._dorm"><h3>🏠 宿舍</h3><div class="dorm-grid"><div class="dorm-item">❄️ <b>{{ detail._dorm.ac?'✓':'✗' }}</b></div><div class="dorm-item">🚿 <b>{{ detail._dorm.ba||'--' }}</b></div><div class="dorm-item">🔥 <b>{{ detail._dorm.ho?'✓':'✗' }}</b></div><div class="dorm-item">🛏️ <b>{{ detail._dorm.be||'--' }}</b></div></div><p style="margin-top:4px;font-size:.74rem;color:#6b7280">{{ detail._dorm.de||'' }}</p></div>
+  <div class="modal-section" v-if="detail._history&&detail._history.length"><h3>📈 历年录取</h3><table style="width:100%;border-collapse:collapse;font-size:.74rem"><tr style="background:#f9fafb"><th>年份</th><th>最低分</th><th>位次</th><th>平均分</th></tr><tr v-for="h in detail._history" :key="h.y"><td style="text-align:center;padding:6px;border-bottom:1px solid #e5e7eb">{{ h.y }}</td><td style="text-align:center;padding:6px;border-bottom:1px solid #e5e7eb;font-weight:700">{{ h.m }}</td><td style="text-align:center;padding:6px;border-bottom:1px solid #e5e7eb">{{ h.r }}</td><td style="text-align:center;padding:6px;border-bottom:1px solid #e5e7eb">{{ h.a }}</td></tr></table></div>
+  <div class="modal-section"><h3>🎯 专业</h3><div class="majors"><span class="major-tag" v-for="m in (detail.majors||[])" :key="m">{{ m }}</span></div></div>
+  <div class="modal-section"><h3>💬 {{ detail.name }} 校友说</h3><div class="th-input-wrap"><textarea class="th-input" v-model="thText" placeholder="匿名分享..." maxlength="150" style="height:38px;font-size:.74rem"></textarea><button class="th-submit" @click="postForSchool(detail.name)" :disabled="!thText.trim()">发布</button></div><div v-if="schoolPosts(detail.name).length===0" style="text-align:center;padding:12px;color:#9ca3af;font-size:.7rem">🌱 还没有人分享</div><div class="th-post" v-for="(p,i) in schoolPosts(detail.name)" :key="i"><div class="th-time">🕐 {{ p.time }}</div><div class="th-text">{{ p.text }}</div></div></div>
+</div></div>
+
+</div>
+<div class="footer">数据仅供参考 · 请以各省教育考试院官方公布为准</div>
+
+<script src="https://unpkg.com/vue@3.4.21/dist/vue.global.prod.js"></script>
+<script>
+const {createApp}=Vue;
+const PROVINCES=['北京','天津','河北','山西','辽宁','吉林','黑龙江','上海','江苏','浙江','安徽','福建','江西','山东','河南','湖北','湖南','广东','广西','海南','重庆','四川','贵州','云南','陕西','甘肃','青海','宁夏','新疆','西藏','内蒙古'];
+const SUBJECTS=['物理','化学','生物','历史','地理','政治','技术'];
+const CITY_TIERS={一线:['北京','上海','广州','深圳'],新一线:['成都','杭州','重庆','武汉','西安','苏州','天津','南京','长沙','郑州','东莞','青岛','沈阳','合肥','宁波','昆明','大连','无锡','厦门']};
+
+function getCityTier(c){for(const[t,cs]of Object.entries(CITY_TIERS))if(cs.some(x=>c&&c.includes(x)))return t;return'二线'}
+function needW(s){return['哈尔滨','长春','沈阳','呼和浩特','乌鲁木齐','兰州','西宁','银川'].some(x=>(s.city||'').includes(x))}
+function needR(s){return['武汉','南京','上海','杭州','长沙','广州','深圳','成都','重庆'].some(x=>(s.city||'').includes(x))}
+function needS(s){return['广州','深圳','海口','南宁','福州','厦门','武汉','重庆','南京'].some(x=>(s.city||'').includes(x))}
+
+// 展开slim数据
+function expandSchool(s){
+  return{
+    id:s.id,name:s.n,province:s.p,city:s.c,cityTier:s.t||getCityTier(s.c),type:s.ty,
+    is985:s.a9,is211:s.a2,isDoubleFirstClass:s.df,
+    predicted:s.pr,lastYear:s.ly,minRank:s.mr,avgScore:s.av,
+    level:s.lv,dormRating:s.dr,tuition:s.tu,
+    majors:s.mj||[],location:s.lo,
+    _dorm:s.dm?{ac:s.dm.ac,ba:s.dm.ba,ho:s.dm.ho,be:s.dm.be,ne:s.dm.ne,bl:s.dm.bl,de:s.dm.de}:null,
+    _history:s.hi||[],
+    _life:s.li?{ca:s.li.ca,mc:s.li.mc,tr:s.li.tr,gr:s.li.gr,cl:s.li.cl,io:s.li.io,ss:s.li.ss}:null,
+    _img:'images/schools/'+s.id+'.svg'
+  };
+}
+
+createApp({
+  data(){return{
+    allSchools:[],results:[],userScore:0,searched:false,detail:null,filter:'all',searchText:'',
+    form:{province:'湖北',score:642,rank:4500,subjects:['物理','化学','生物']},
+    thText:'',thPosts:JSON.parse(localStorage.getItem('th2')||'[]')
+  }},
+  computed:{
+    canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},
+    provinces(){return PROVINCES},allSubjects(){return SUBJECTS},
+    filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==='rush')l=l.filter(r=>r.level==='rush');if(this.filter==='stable')l=l.filter(r=>r.level==='stable');if(this.filter==='safe')l=l.filter(r=>r.level==='safe');return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
+  },
+  methods:{
+    async init(){try{const r=await fetch('schools.json');if(r.ok){const slim=await r.json();this.allSchools=slim.map(expandSchool)}}catch(e){console.log('schools.json not loaded')}},
+    toggleSubject(s){const i=this.form.subjects.indexOf(s);if(i>=0)this.form.subjects.splice(i,1);else if(this.form.subjects.length<3)this.form.subjects.push(s)},
+    doSearch(){
+      if(!this.canSearch||!this.allSchools.length)return;this.userScore=this.form.score;this.searched=true;this.filter='all';this.searchText='';
+      let list=this.allSchools.filter(s=>Math.abs(s.predicted-this.form.score)<=55);
+      list.sort((a,b)=>b.predicted-a.predicted);
+      this.results=list.map(s=>{const gap=s.predicted-this.form.score,ag=Math.abs(gap);const gt=gap>5?'差'+gap+'分':gap>0?'差'+gap+'分':gap<-20?'高'+ag+'分':gap<-5?'高'+ag+'分':'压线';const gc=gap>5?'gap-rush':gap<-10?'gap-safe':'gap-stable';const mn=Math.min(s.predicted,this.form.score)-15,mx=Math.max(s.predicted,this.form.score)+15,rg=mx-mn;const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;return{...s,_showDorm:false,_showLife:false,fav:false,_gapText:gt,_gapCls:gc,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm))}});
+    },
+    openDetail(s){this.detail=s;document.body.style.overflow='hidden'},
+    heroBg(s){const m={综合类:['#667eea','#764ba2'],理工类:['#1e40af','#3b82f6'],师范类:['#059669','#34d399'],财经类:['#d97706','#f59e0b'],医药类:['#e11d48','#fb7185'],农林类:['#2d8c4a','#4ade80'],语言类:['#7c3aed','#a78bfa'],艺术类:['#db2777','#f472b6']};const c=m[s.type]||['#6366f1','#8b5cf6'];return'linear-gradient(135deg,'+c[0]+','+c[1]+')'},
+    gridPts(r){return[0,1,2,3,4].map(i=>{const a=-Math.PI/2+i*2*Math.PI/5;return(70+r*Math.cos(a)/18)+','+(70+r*Math.sin(a)/18)}).join(' ')},
+    radarPts(s){const l=s._life||{};const v=[l.ca||3,l.tr||3,l.cl||3,l.io||3,s.dormRating||3];return v.map((x,i)=>{const a=-Math.PI/2+i*2*Math.PI/5,r=(x/5)*55;return(70+r*Math.cos(a))+','+(70+r*Math.sin(a))}).join(' ')},
+    radarDots(s){const l=s._life||{};const v=[l.ca||3,l.tr||3,l.cl||3,l.io||3,s.dormRating||3];return v.map((x,i)=>{const a=-Math.PI/2+i*2*Math.PI/5,r=(x/5)*55;return[70+r*Math.cos(a),70+r*Math.sin(a)]})},
+    dimLabels(s){const l=s._life||{};return[['🍜','食堂',(l.ca||0)+'分','#f59e0b'],['🚇','交通','★'.repeat(l.tr||0),'#667eea'],['🌡️','气候','★'.repeat(l.cl||0),'#30a060'],['💼','实习','★'.repeat(l.io||0),'#e85070'],['🏠','宿舍',(s.dormRating||0)+'分','#8b5cf6']]},
+    needW,needR,needS,
+    postForSchool(name){if(!this.thText.trim())return;const now=new Date();const t=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');this.thPosts.unshift({time:t,school:name,text:this.thText.trim()});localStorage.setItem('th2',JSON.stringify(this.thPosts));this.thText=''},
+    schoolPosts(name){return this.thPosts.filter(p=>p.school===name).slice(0,20)}
+  },
+  watch:{detail(v){if(!v)document.body.style.overflow=''}},
+  async mounted(){await this.init()}
+}).mount('#app');
+</script>
+</body>
+</html>
