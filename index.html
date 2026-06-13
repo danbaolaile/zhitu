@@ -65,7 +65,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .score-fill-bar.rush{background:linear-gradient(90deg,#fca5a5,#e85070)}.score-fill-bar.stable{background:linear-gradient(90deg,#fcd34d,#f0a030)}.score-fill-bar.safe{background:linear-gradient(90deg,#6ee7b7,#30a060)}
 .score-mid-mark{position:absolute;top:-3px;bottom:-3px;width:3px;background:#1a1a2e;z-index:2;border-radius:2px}
 .score-mid-mark::after{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #1a1a2e;box-shadow:0 2px 6px rgba(0,0,0,.3);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.3)}50%{box-shadow:0 2px 16px rgba(0,0,0,.5)}}
+@keyframes pulse{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.3)}50%{box-shadow:0 2px 16px rgba(0,0,0,.5)}}@keyframes pulse2{0%,100%{opacity:1}50%{opacity:.75}}
 .score-legends{display:flex;justify-content:space-between;font-size:.62rem;color:#c4c4c4;margin-top:1px}
 .majors{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
 .major-tag{padding:2px 7px;background:#eef2ff;color:#c4562e;border-radius:10px;font-size:.67rem;font-weight:600}
@@ -116,13 +116,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">🎓 <span>志途</span> · 高考志愿助手</div></div>
+<div class="header"><div class="logo">🎓 <span>志途</span> · 高考志愿助手 <span style="background:#e85070;color:#fff;font-size:.6rem;padding:2px 6px;border-radius:6px;vertical-align:middle;margin-left:4px;animation:pulse2 2s ease-in-out infinite">免费</span></div></div>
 <div class="container" id="app">
 
 <div v-if="!searched" class="hero">
-  <h1>选对大学，<em>人生开挂</em></h1>
-  <p>120所一本大学智能匹配 · 宿舍/生活画像 · 四年花费</p>
-  <button class="demo-btn" @click="quickDemo" v-if="!searched">✨ 快速体验 · 湖北 642 分</button>
+  <h1>你的分数，<em>能上哪所</em>？</h1>
+  <p>160所一本大学 · 宿舍/食堂/花费全透明 · 免费</p>
+  <button class="demo-btn" @click="quickDemo" v-if="!searched">✨ 免费体验 · 湖北 642 分</button>
 <div class="hero-stats">
     <div class="hero-stat"><div class="num">{{ allSchools.length }}</div><div class="lbl">一本院校</div></div>
     <div class="hero-stat"><div class="num">31省</div><div class="lbl">分省适配</div></div>
