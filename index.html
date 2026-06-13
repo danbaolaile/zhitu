@@ -152,6 +152,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <button :class="{active:filter==='rush'}" @click="filter='rush'">冲刺</button>
   <button :class="{active:filter==='stable'}" @click="filter='stable'">稳妥</button>
   <button :class="{active:filter==='safe'}" @click="filter='safe'">保底</button>
+  <button :class="{active:filter==='life'}" @click="filter='life'" style="border-color:#f59e0b;color:#d97706">🏠 生活最佳</button>
 </div>
 
 <div v-for="s in filteredResults" :key="s.id" :class="['school-card',s.level,{fav:s.fav}]">
@@ -242,7 +243,7 @@ createApp({
   computed:{
     canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},
     provinces(){return PROVINCES},allSubjects(){return SUBJECTS},
-    filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==='rush')l=l.filter(r=>r.level==='rush');if(this.filter==='stable')l=l.filter(r=>r.level==='stable');if(this.filter==='safe')l=l.filter(r=>r.level==='safe');return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
+    filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==='rush')l=l.filter(r=>r.level==='rush');if(this.filter==='stable')l=l.filter(r=>r.level==='stable');if(this.filter==='safe')l=l.filter(r=>r.level==='safe');if(this.filter==='life')l=[...l].sort((a,b)=>(b.dormRating||0)-(a.dormRating||0)).slice(0,20);return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
   },
   methods:{
     async init(){try{const r=await fetch('schools.json');if(r.ok){const slim=await r.json();this.allSchools=slim.map(expandSchool)}}catch(e){console.log('schools.json not loaded')}},
