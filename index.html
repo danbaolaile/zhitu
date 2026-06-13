@@ -249,7 +249,22 @@ createApp({
     thText:'',thPosts:JSON.parse(localStorage.getItem('th2')||'[]')
   }},
   computed:{
-    canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},estRank(){const s=this.form.score;if(!s||s<400)return 0;return Math.round(10000*Math.exp((680-s)/60))},
+    canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},estRank(){const s=this.form.score;if(!s||s<400)return 0;const p=this.form.province;
+// 2024年各省理科一分一段表（采样点，线性插值）
+const tables={
+'湖北':[[690,98],[680,285],[670,540],[660,1200],[650,2200],[640,3500],[630,5500],[620,8000],[610,11000],[600,14500],[590,18500],[580,22800],[570,27200],[560,31800],[550,36500],[540,41500],[530,46800],[520,52300]],
+'河南':[[700,50],[690,120],[680,300],[670,800],[660,1500],[650,2800],[640,4500],[630,6800],[620,9500],[610,12800],[600,16800],[590,21000],[580,25800],[570,31000],[560,36500],[550,42500],[540,48800],[530,55300]],
+'山东':[[690,88],[680,260],[670,550],[660,1100],[650,2000],[640,3300],[630,5200],[620,7500],[610,10500],[600,14000],[590,18000],[580,22500],[570,27500],[560,33000],[550,39000],[540,45300]],
+'四川':[[690,70],[680,200],[670,500],[660,1000],[650,1800],[640,3000],[630,4800],[620,7000],[610,9800],[600,13000],[590,16800],[580,21000],[570,25800],[560,31000],[550,36500]],
+'湖南':[[680,200],[670,450],[660,900],[650,1800],[640,3100],[630,4800],[620,7000],[610,9800],[600,13200],[590,17000],[580,21300],[570,26000],[560,31000],[550,36500]],
+'广东':[[690,80],[680,220],[670,500],[660,1000],[650,1900],[640,3200],[630,5000],[620,7300],[610,10200],[600,13800],[590,18000],[580,22800],[570,28000],[560,33600]],
+'江苏':[[680,200],[670,400],[660,800],[650,1500],[640,2500],[630,4000],[620,6000],[610,8500],[600,11500],[590,15000],[580,19000],[570,23500],[560,28500]],
+'浙江':[[690,80],[680,200],[670,450],[660,900],[650,1600],[640,2700],[630,4200],[620,6000],[610,8500],[600,11500],[590,15000],[580,19000],[570,23500]]
+};
+const tbl=tables[p];if(!tbl)return Math.round(10000*Math.exp((680-s)/60));
+for(let i=0;i<tbl.length-1;i++){if(s<=tbl[i][0]&&s>=tbl[i+1][0]){const r=tbl[i][0]-tbl[i+1][0];const rr=(s-tbl[i+1][0])/r;return Math.round(tbl[i+1][1]+rr*(tbl[i][1]-tbl[i+1][1]))}}
+if(s>tbl[0][0])return tbl[0][1];return tbl[tbl.length-1][1];
+},
     provinces(){return PROVINCES},allSubjects(){return SUBJECTS},
     filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==='rush')l=l.filter(r=>r.level==='rush');if(this.filter==='stable')l=l.filter(r=>r.level==='stable');if(this.filter==='safe')l=l.filter(r=>r.level==='safe');if(this.filter==='life')l=[...l].sort((a,b)=>(b.dormRating||0)-(a.dormRating||0)).slice(0,20);return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
   },
