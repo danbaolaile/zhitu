@@ -146,22 +146,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 </div>
 
 <div v-if="results.length" style="background:#fef9f4;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:.72rem;color:#6b7280;line-height:1.6">
-  💡 <strong style="color:#2d2420">80个志愿怎么填？</strong>
-  前5个→<span style="color:#e85070">冲顶校冷门专业</span> ·
-  6-25→<span style="color:#d97706">稳妥校对口专业</span> ·
-  26-80→<span style="color:#059669">保底校王牌专业</span>
+  💡 <strong style="color:#2d2420">80个志愿怎么填？</strong><br>
+  <span style="color:#c4c4c4">1-5</span> <span style="color:#e85070">🌟许愿</span>清北随便填 ·
+  <span style="color:#f0a030">6-30</span> <span style="color:#e85070">📈冲刺捡漏</span> ·
+  <span style="color:#667eea">31-60</span> <span style="color:#2d2420">🎯核心录取区间</span> ·
+  <span style="color:#059669">61-80</span> <span style="color:#059669">🛡️保底</span>
 </div>
 <div v-if="results.length" class="action-bar">
   <span class="count">{{ filteredResults.length }} 所</span>
   <input class="search-input" v-model="searchText" placeholder="搜学校...">
   <button :class="{active:filter==='all'}" @click="filter='all'">全部</button>
-  <button :class="{active:filter==='rush'}" @click="filter='rush'">冲刺</button>
-  <button :class="{active:filter==='stable'}" @click="filter='stable'">稳妥</button>
-  <button :class="{active:filter==='safe'}" @click="filter='safe'">保底</button>
+  <button :class="{active:filter==='wish'}" @click="filter='wish'">🌟许愿</button>
+  <button :class="{active:filter==='rush'}" @click="filter='rush'">📈冲刺</button>
+  <button :class="{active:filter==='core'}" @click="filter='core'">🎯核心</button>
+  <button :class="{active:filter==='safe'}" @click="filter='safe'">🛡️保底</button>
   <button :class="{active:filter==='life'}" @click="filter='life'" style="border-color:#f59e0b;color:#d97706">🏠 生活最佳</button>
 </div>
 
-<div v-for="s in filteredResults" :key="s.id" :class="['school-card',s.level,{fav:s.fav}]">
+<div v-for="s in filteredResults" :key="s.id" :class="['school-card',s.tier==='wish'?'rush':s.tier==='core'?'stable':s.level,'fav':s.fav]">
   <div class="card-row">
     <img v-if="s._img" :src="s._img" class="card-img" :alt="s.name" @error="s._img=''">
     <div class="card-main">
@@ -251,7 +253,7 @@ createApp({
   computed:{
     canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},
     provinces(){return PROVINCES},allSubjects(){return SUBJECTS},
-    filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==='rush')l=l.filter(r=>r.level==='rush');if(this.filter==='stable')l=l.filter(r=>r.level==='stable');if(this.filter==='safe')l=l.filter(r=>r.level==='safe');if(this.filter==='life')l=[...l].sort((a,b)=>(b.dormRating||0)-(a.dormRating||0)).slice(0,20);return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
+    filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==="wish")l=l.filter(r=>r.tier==="wish");if(this.filter==="rush")l=l.filter(r=>r.tier==="rush");if(this.filter==="core")l=l.filter(r=>r.tier==="core");if(this.filter==="safe")l=l.filter(r=>r.tier==="safe");if(this.filter==="life")l=[...l].sort((a,b)=>(b.dormRating||0)-(a.dormRating||0)).slice(0,20);return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
   },
   methods:{
     async init(){try{const r=await fetch('schools.json');if(r.ok){const slim=await r.json();this.allSchools=slim.map(expandSchool)}}catch(e){console.log('schools.json not loaded')}},
@@ -259,9 +261,23 @@ createApp({
 toggleSubject(s){const i=this.form.subjects.indexOf(s);if(i>=0)this.form.subjects.splice(i,1);else if(this.form.subjects.length<3)this.form.subjects.push(s)},
     doSearch(){
       if(!this.canSearch||!this.allSchools.length)return;this.userScore=this.form.score;this.searched=true;this.filter='all';this.searchText='';
-      let list=this.allSchools.filter(s=>{const g=s.predicted-this.form.score;return g<=15&&g>=-55});
-      list.sort((a,b)=>b.predicted-a.predicted);
-      this.results=list.map(s=>{const gap=s.predicted-this.form.score,ag=Math.abs(gap);const gt=gap>10?'差'+gap+'分(找冷门专业)':gap>0?'差'+gap+'分(可冲刺)':gap>-5?'压线':gap>-15?'高'+ag+'分(稳妥)':'高'+ag+'分(保底)';const gc=gap>5?'gap-rush':gap>-10?'gap-stable':'gap-safe';const lv=gap>5?'rush':gap>-10?'stable':'safe';const hint=gap>10?'🎯冲冷门专业':gap>0?'📈可冲刺':gap>-5?'⚖️稳妥':'🛡️保底';const mn=Math.min(s.predicted,this.form.score)-15,mx=Math.max(s.predicted,this.form.score)+15,rg=mx-mn;const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;return{...s,level:lv,_showDorm:false,_showLife:false,fav:false,_gapText:gt,_gapCls:gc,_hint:hint,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm))}});
+      // 四档：许愿(上不封顶)/冲刺(5-20)/核心(±10)/保底(-15~-40)
+      let all=this.allSchools.map(s=>{
+        const gap=s.predicted-this.form.score,ag=Math.abs(gap);
+        let tier,gt,gc,lv,hint,slot;
+        if(gap>20){tier='wish';gt='差'+gap+'分';gc='gap-rush';lv='rush';hint='🌟许愿';slot='1-5'}
+        else if(gap>5){tier='rush';gt='差'+gap+'分';gc='gap-rush';lv='rush';hint='📈冲刺';slot='6-30'}
+        else if(gap>=-10){tier='core';gt=gap>=-3?'压线':'高'+ag+'分';gc='gap-stable';lv='stable';hint='🎯核心';slot='31-60'}
+        else if(gap>=-40){tier='safe';gt='高'+ag+'分';gc='gap-safe';lv='safe';hint='🛡️保底';slot='61-80'}
+        else return null; // 太低不显示
+        const mn=Math.min(s.predicted,this.form.score)-20,mx=Math.max(s.predicted,this.form.score)+20,rg=mx-mn;
+        const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;
+        // 估算位次
+        const estRank=s.minRank||Math.round(10000*Math.pow(0.98,(s.predicted-600)));
+        return{...s,tier,level:lv,_showDorm:false,_showLife:false,fav:false,_gapText:gt,_gapCls:gc,_hint:hint,_slot:slot,_estRank:estRank,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm))};
+      }).filter(Boolean);
+      all.sort((a,b)=>b.predicted-a.predicted);
+      this.results=all;
     },
     openDetail(s){this.detail=s;document.body.style.overflow='hidden'},
     heroBg(s){const m={综合类:['#e8794b','#d4622e'],理工类:['#1e40af','#3b82f6'],师范类:['#059669','#34d399'],财经类:['#d97706','#f59e0b'],医药类:['#e11d48','#fb7185'],农林类:['#2d8c4a','#4ade80'],语言类:['#7c3aed','#f4a460'],艺术类:['#db2777','#f472b6']};const c=m[s.type]||['#e8794b','#d4622e'];return'linear-gradient(135deg,'+c[0]+','+c[1]+')'},
