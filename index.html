@@ -8,7 +8,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#fef9f4;color:#1a1a2e;line-height:1.6;min-height:100vh}
-.header{background:linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460);color:#fff;padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.15);text-align:center}
+.header{background:#1c1c1e;color:#fff;padding:10px 16px;position:sticky;top:0;z-index:100;box-shadow:0 1px 2px rgba(0,0,0,.08);text-align:center}
 .header .logo{font-size:1.1rem;font-weight:800}.header .logo span{background:linear-gradient(135deg,#e8794b,#e85070);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .container{max-width:700px;margin:0 auto;padding:0 16px 40px}
 .hero{padding:32px 16px 24px;text-align:center;position:relative;overflow:hidden}
@@ -19,10 +19,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .hero-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .hero-stat{background:#fff;border-radius:14px;padding:10px 16px;box-shadow:0 2px 12px rgba(0,0,0,.04);text-align:center;min-width:70px}
 .hero-stat .num{font-size:1.2rem;font-weight:800;color:#1a1a2e}.hero-stat .lbl{font-size:.65rem;color:#9ca3af}
-.demo-btn{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,#e8794b,#e85070);color:#fff;border:none;border-radius:24px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;box-shadow:0 4px 16px rgba(232,121,75,.3);transition:.2s;animation:shimmer 2s ease-in-out infinite;background-size:200% 200%}
-@keyframes shimmer{0%,100%{background-position:0 0}50%{background-position:100% 0}}
+.demo-btn{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,#e8794b,#e85070);color:#fff;border:none;border-radius:14px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px;box-shadow:0 4px 16px rgba(232,121,75,.3);transition:.2s}
+50%{background-position:100% 0}}
 .demo-btn:hover{transform:scale(1.04);box-shadow:0 6px 24px rgba(232,121,75,.45)}
-.search-card{background:#fff;border-radius:18px;padding:20px 16px;box-shadow:0 2px 20px rgba(0,0,0,.06);margin-bottom:16px}
+.search-card{background:#fff;border-radius:14px;padding:20px 16px;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:16px}
 .search-card h2{font-size:1rem;margin-bottom:12px}
 .form-row{margin-bottom:10px}
 .form-row label{display:block;font-size:.76rem;font-weight:700;color:#374151;margin-bottom:3px}
@@ -30,19 +30,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .form-row select:focus,.form-row input:focus{border-color:#e8794b;box-shadow:0 0 0 3px rgba(232,121,75,.1);background:#fff}
 .inline-row{display:flex;gap:8px}.inline-row .form-row{flex:1}
 .subject-chips{display:flex;gap:6px;flex-wrap:wrap}
-.subject-chip{padding:6px 14px;border:2px solid #e5e7eb;border-radius:20px;font-size:.8rem;cursor:pointer;user-select:none;background:#f9fafb;transition:.15s;font-weight:600;color:#6b7280}
+.subject-chip{padding:6px 14px;border:2px solid #e5e7eb;border-radius:14px;font-size:.8rem;cursor:pointer;user-select:none;background:#f9fafb;transition:.15s;font-weight:600;color:#6b7280}
 .subject-chip:hover{border-color:#e8794b;color:#e8794b}.subject-chip.on{background:#e8794b;color:#fff;border-color:#e8794b}
-.search-btn{width:100%;padding:13px;margin-top:4px;background:linear-gradient(135deg,#e8794b,#d4622e);color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:.25s;box-shadow:0 6px 24px rgba(232,121,75,.35)}
-.search-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(232,121,75,.45)}.search-btn:active{transform:scale(.97)}.search-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.search-btn{width:100%;padding:13px;margin-top:4px;background:#e8794b;color:#fff;border:none;border-radius:14px;font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer;transition:.25s;box-shadow:0 2px 8px rgba(232,121,75,.2)}
+.search-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(232,121,75,.25)}.search-btn:active{transform:scale(.97)}.search-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .action-bar{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .action-bar .count{font-weight:700;font-size:.92rem;margin-right:auto}
-.action-bar button{padding:6px 13px;border:2px solid #e5e7eb;border-radius:20px;font-size:.74rem;font-weight:600;cursor:pointer;background:#fff;transition:.15s;font-family:inherit;color:#374151}
+.action-bar button{padding:6px 13px;border:2px solid #e5e7eb;border-radius:14px;font-size:.74rem;font-weight:600;cursor:pointer;background:#fff;transition:.15s;font-family:inherit;color:#374151}
 .action-bar button:hover{border-color:#e8794b;color:#e8794b}.action-bar button.active{background:#e8794b;color:#fff;border-color:#e8794b}
-.search-input{padding:5px 10px;border:2px solid #e5e7eb;border-radius:20px;font-size:.74rem;font-family:inherit;outline:none;width:110px;transition:.2s}.search-input:focus{border-color:#e8794b;width:150px}
-.school-card{background:#fff;border-radius:18px;padding:14px 14px 10px;margin-bottom:10px;box-shadow:0 2px 12px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;animation:cardIn .4s ease backwards;border-left:5px solid #e5e7ea}
+.search-input{padding:5px 10px;border:2px solid #e5e7eb;border-radius:14px;font-size:.74rem;font-family:inherit;outline:none;width:110px;transition:.2s}.search-input:focus{border-color:#e8794b;width:150px}
+.school-card{background:#fff;border-radius:14px;padding:14px 14px 10px;margin-bottom:10px;box-shadow:0 2px 12px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);transition:all .25s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;animation:cardIn .4s ease backwards;border-left:5px solid #e5e7ea}
 .school-card:nth-child(1){animation-delay:0s}.school-card:nth-child(2){animation-delay:.06s}.school-card:nth-child(3){animation-delay:.12s}.school-card:nth-child(4){animation-delay:.18s}.school-card:nth-child(5){animation-delay:.24s}.school-card:nth-child(n+6){animation-delay:.3s}
-@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.school-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);transform:translateY(-3px)}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0) scale(1)}}
+.school-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.06);transform:translateY(-1px)}
 .school-card.fav{border-color:#f59e0b;border-left-color:#f59e0b;box-shadow:0 0 0 1px rgba(245,158,11,.2)}
 .school-card.rush{border-left-color:#e85070}.school-card.stable{border-left-color:#f0a030}.school-card.safe{border-left-color:#30a060}
 .card-row{display:flex;gap:10px;align-items:flex-start}
@@ -53,7 +53,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
 .tag{padding:1px 6px;border-radius:4px;font-size:.62rem;font-weight:700}
 .tag-985{background:#fef3c7;color:#92400e}.tag-211{background:#dbeafe;color:#1e40af}.tag-city{background:#f3f4f6;color:#6b7280}
-.level-badge{padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;white-space:nowrap;flex-shrink:0}
+.level-badge{padding:3px 10px;border-radius:14px;font-size:.72rem;font-weight:700;white-space:nowrap;flex-shrink:0}
 .level-badge.rush{background:#fde8ed;color:#e85070}.level-badge.stable{background:#fef5e7;color:#d97706}.level-badge.safe{background:#e8f5ef;color:#059669}
 .score-bar{margin:6px 0 3px}
 .score-nums{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
@@ -90,7 +90,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .life-row .ico{width:16px;text-align:center}.life-row .lbl{color:#6b7280;width:36px;flex-shrink:0}.life-row .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}.life-row .val{font-weight:700;color:#1a1a2e}
 .senior-quote{font-size:.68rem;color:#e8794b;font-style:italic;margin-top:6px;padding-top:6px;border-top:1px solid #e5e7eb}
 .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:999;display:flex;align-items:flex-end;justify-content:center}
-.modal-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:700px;max-height:85vh;overflow-y:auto;padding:22px 18px 28px;animation:slideUp2 .3s ease}
+.modal-box{background:#fff;border-radius:14px 20px 0 0;width:100%;max-width:700px;max-height:85vh;overflow-y:auto;padding:22px 18px 28px;animation:slideUp2 .3s ease}
 @keyframes slideUp2{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .modal-close{position:sticky;top:0;float:right;width:30px;height:30px;border-radius:50%;border:none;background:#f3f4f6;font-size:1rem;cursor:pointer;z-index:2}
 .detail-hero{padding:24px 16px;border-radius:16px;text-align:center;margin-bottom:10px;color:#fff}
@@ -109,20 +109,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .bag-item{font-size:.7rem;padding:5px 8px;background:#f0fdf4;border-radius:8px;display:flex;align-items:center;gap:3px}.bag-item.special{background:#fef3c7}
 .th-input-wrap{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
 .th-input{flex:1;min-width:180px;padding:8px 10px;border:2px solid #e5e7eb;border-radius:10px;font-size:.78rem;font-family:inherit;resize:none;outline:none;height:42px}.th-input:focus{border-color:#e8794b}
-.th-submit{padding:8px 16px;background:linear-gradient(135deg,#e8794b,#d4622e);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.76rem}
+.th-submit{padding:8px 16px;background:#e8794b;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.76rem}
 .th-post{background:#fff;border-radius:10px;padding:10px;margin-bottom:6px;box-shadow:0 1px 3px rgba(0,0,0,.03)}.th-post .th-time{font-size:.62rem;color:#c4c4c4;margin-bottom:2px}.th-post .th-text{font-size:.8rem;line-height:1.5;white-space:pre-wrap}
 .footer{text-align:center;padding:24px 16px;font-size:.66rem;color:#d1d5db}
 @media(max-width:480px){.hero-stats{gap:8px}.hero-stat{padding:8px 10px;min-width:55px}.hero-stat .num{font-size:1rem}.card-img{width:46px;height:46px}.dorm-grid{grid-template-columns:1fr 1fr}.school-name{font-size:.88rem}.life-panel{flex-direction:column}.detail-stats{grid-template-columns:1fr 1fr}.bag-list{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">🎓 <span>志途</span> · 高考志愿助手 <span style="background:#e85070;color:#fff;font-size:.6rem;padding:2px 6px;border-radius:6px;vertical-align:middle;margin-left:4px;animation:pulse2 2s ease-in-out infinite">免费</span></div></div>
+<div class="header"><div class="logo">🎓 <span>志途</span> · 高考志愿助手 </div></div>
 <div class="container" id="app">
 
 <div v-if="!searched" class="hero">
   <h1>你的分数，<em>能上哪所</em>？</h1>
-  <p>160所一本大学 · 宿舍/食堂/花费全透明 · 免费</p>
-  <button class="demo-btn" @click="quickDemo" v-if="!searched">✨ 免费体验 · 湖北 642 分</button>
+  <p>160所一本大学 · 宿舍食堂花费全透明</p>
+  <button class="demo-btn" @click="quickDemo" v-if="!searched">✨ 快速体验 · 湖北 642 分</button>
 <div class="hero-stats">
     <div class="hero-stat"><div class="num">{{ allSchools.length }}</div><div class="lbl">一本院校</div></div>
     <div class="hero-stat"><div class="num">31省</div><div class="lbl">分省适配</div></div>
