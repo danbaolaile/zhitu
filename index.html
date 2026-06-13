@@ -127,7 +127,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 
 <div v-if="!searched" class="hero">
   <h1>你的分数，<em>能上哪所</em>？</h1>
-  <p>160所一本大学 · 宿舍食堂花费全透明</p>
+  <p>你的分数能报哪些学校+专业？80个志愿怎么填最划算</p>
   <button class="demo-btn" @click="quickDemo" v-if="!searched">✨ 快速体验 · 湖北 642 分</button>
 <div class="hero-stats">
     <div class="hero-stat"><div class="num">{{ allSchools.length }}</div><div class="lbl">一本院校</div></div>
@@ -146,7 +146,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 </div>
 
 <div v-if="results.length" class="action-bar">
-  <span class="count">{{ filteredResults.length }} 所</span>
+  <span class="count">🎯 {{ filteredResults.length }} 所 · 冲刺{{counts.rush}} 稳妥{{counts.stable}} 保底{{counts.safe}}</span>
   <input class="search-input" v-model="searchText" placeholder="搜学校...">
   <button :class="{active:filter==='all'}" @click="filter='all'">全部</button>
   <button :class="{active:filter==='rush'}" @click="filter='rush'">冲刺</button>
@@ -160,7 +160,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
     <img v-if="s._img" :src="s._img" class="card-img" :alt="s.name" @error="s._img=''">
     <div class="card-main">
       <div class="card-top-row"><div><div class="school-name">{{ s.name }}</div><div class="school-sub">{{ s.city }} · {{ s.cityTier }}城市</div></div><span :class="['level-badge',s.level]">{{ s.level==='rush'?'🚀 冲刺':s.level==='stable'?'⚖️ 稳妥':'🛡️ 保底' }}</span></div>
-      <div class="tags"><span v-if="s.is985" class="tag tag-985">985</span><span v-if="s.is211" class="tag tag-211">211</span><span v-if="s.isDoubleFirstClass" class="tag tag-985">双一流</span><span class="tag tag-city">{{ s.province }}</span></div>
+      <div class="tags"><span v-if="s.is985" class="tag tag-985">985</span><span v-if="s.is211" class="tag tag-211">211</span><span v-if="s.isDoubleFirstClass" class="tag tag-985">双一流</span><span class="tag tag-city">{{ s.province }}</span><span v-if="s._hint" style="font-size:.6rem;color:#e8794b;font-weight:700;margin-left:4px">{{ s._hint }}</span></div>
       <div class="score-bar"><div class="score-nums"><span class="sch">🏫 {{ s.predicted }}分</span><span :class="['gap',s._gapCls]">{{ s._gapText }}</span><span class="usr">👤 {{ userScore }}分</span></div><div class="score-track-wrap"><div :class="['score-fill-bar',s.level]" :style="{width:s._fillPct+'%'}"></div><div class="score-mid-mark" :style="{left:s._midMark+'%'}"></div></div><div class="score-legends"><span>学校预估线</span><span>你的位置</span></div></div>
       <div class="majors"><span class="major-tag" v-for="m in (s.majors||[]).slice(0,4)" :key="m">{{ m }}</span></div>
       <div class="life-bar-inline" v-if="s._life">
@@ -251,9 +251,23 @@ createApp({
 toggleSubject(s){const i=this.form.subjects.indexOf(s);if(i>=0)this.form.subjects.splice(i,1);else if(this.form.subjects.length<3)this.form.subjects.push(s)},
     doSearch(){
       if(!this.canSearch||!this.allSchools.length)return;this.userScore=this.form.score;this.searched=true;this.filter='all';this.searchText='';
-      let list=this.allSchools.filter(s=>Math.abs(s.predicted-this.form.score)<=55);
-      list.sort((a,b)=>b.predicted-a.predicted);
-      this.results=list.map(s=>{const gap=s.predicted-this.form.score,ag=Math.abs(gap);const gt=gap>5?'差'+gap+'分':gap>0?'差'+gap+'分':gap<-20?'高'+ag+'分':gap<-5?'高'+ag+'分':'压线';const gc=gap>5?'gap-rush':gap<-10?'gap-safe':'gap-stable';const mn=Math.min(s.predicted,this.form.score)-15,mx=Math.max(s.predicted,this.form.score)+15,rg=mx-mn;const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;return{...s,_showDorm:false,_showLife:false,fav:false,_gapText:gt,_gapCls:gc,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm))}});
+      let all=this.allSchools.map(s=>{
+        const gap=s.predicted-this.form.score;
+        // 务实分级：冲刺≤15分差, 稳妥-15~0, 保底<-15
+        let level,gt,gc;
+        if(gap>15){level=null;gt='差'+gap+'分';gc='gap-rush'} // 太远不显示
+        else if(gap>0){level='rush';gt='差'+gap+'分';gc='gap-rush'}
+        else if(gap>=-15){level='stable';gt=gap>=-3?'压线':'高'+Math.abs(gap)+'分';gc='gap-stable'}
+        else{level='safe';gt='高'+Math.abs(gap)+'分';gc='gap-safe'}
+        // 专业分级：标记可冲/稳/保的专业
+        const rMajors=(s.mj||[]).map(m=>({name:m,type:gap>0?'冲刺':gap>-15?'稳妥':'保底'}));
+        const mn=Math.min(s.predicted,this.form.score)-20,mx=Math.max(s.predicted,this.form.score)+20,rg=mx-mn;
+        const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;
+        const _hint=gap>10?'🎯 顶校冷门专业冲刺':gap>0?'📈 可以冲刺':gap>-5?'⚖️ 稳妥匹配':gap>-15?'✅ 稳妥录取':'🛡️ 保底稳妥';
+        return{...s,level,gap,_gapText:gt,_gapCls:gc,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm)),_rMajors:rMajors,_hint};
+      }).filter(s=>s.level!==null); // 去掉分数差>15的
+      all.sort((a,b)=>b.predicted-a.predicted);
+      this.results=all.map(s=>({...s,_showDorm:false,_showLife:false,fav:false}));
     },
     openDetail(s){this.detail=s;document.body.style.overflow='hidden'},
     heroBg(s){const m={综合类:['#e8794b','#d4622e'],理工类:['#1e40af','#3b82f6'],师范类:['#059669','#34d399'],财经类:['#d97706','#f59e0b'],医药类:['#e11d48','#fb7185'],农林类:['#2d8c4a','#4ade80'],语言类:['#7c3aed','#f4a460'],艺术类:['#db2777','#f472b6']};const c=m[s.type]||['#e8794b','#d4622e'];return'linear-gradient(135deg,'+c[0]+','+c[1]+')'},
