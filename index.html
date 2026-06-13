@@ -140,7 +140,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 <div class="search-card">
   <h2>📋 输入信息</h2>
   <div class="form-row"><label>省份</label><select v-model="form.province"><option value="">请选择</option><option v-for="p in provinces" :key="p" :value="p">{{ p }}</option></select></div>
-  <div class="inline-row"><div class="form-row"><label>高考总分</label><input type="number" v-model.number="form.score" placeholder="如 642"></div><div class="form-row"><label>全省位次</label><input type="number" v-model.number="form.rank" placeholder="如 4500"></div></div>
+  <div class="inline-row"><div class="form-row"><label>高考总分 <span v-if="estRank" style="font-weight:400;color:#e8794b;font-size:.7rem">→ 估约全省第 {{ estRank.toLocaleString() }} 名</span></label><input type="number" v-model.number="form.score" placeholder="如 642"></div><div class="form-row"><label>全省位次</label><input type="number" v-model.number="form.rank" placeholder="如 4500"></div></div>
   <div class="form-row"><label>选考科目（点选3门）</label><div class="subject-chips"><span v-for="s in allSubjects" :key="s" :class="['subject-chip',{on:form.subjects.includes(s)}]" @click="toggleSubject(s)">{{ s }}</span></div></div>
   <button class="search-btn" @click="doSearch" :disabled="!canSearch">🔍 开始智能匹配</button>
 </div>
@@ -249,7 +249,7 @@ createApp({
     thText:'',thPosts:JSON.parse(localStorage.getItem('th2')||'[]')
   }},
   computed:{
-    canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},
+    canSearch(){return this.form.province&&this.form.score>0&&this.form.subjects.length===3},estRank(){const s=this.form.score;if(!s||s<400)return 0;return Math.round(10000*Math.exp((680-s)/60))},
     provinces(){return PROVINCES},allSubjects(){return SUBJECTS},
     filteredResults(){let l=this.results;if(this.searchText)l=l.filter(r=>r.name.includes(this.searchText)||r.city.includes(this.searchText)||r.province.includes(this.searchText));if(this.filter==='rush')l=l.filter(r=>r.level==='rush');if(this.filter==='stable')l=l.filter(r=>r.level==='stable');if(this.filter==='safe')l=l.filter(r=>r.level==='safe');if(this.filter==='life')l=[...l].sort((a,b)=>(b.dormRating||0)-(a.dormRating||0)).slice(0,20);return[...l].sort((a,b)=>(b.fav?1:0)-(a.fav?1:0))}
   },
