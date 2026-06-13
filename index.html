@@ -147,9 +147,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 
 <div v-if="results.length" style="background:#fef9f4;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:.72rem;color:#6b7280;line-height:1.6">
   💡 <strong style="color:#2d2420">80个志愿怎么填？</strong>
-  前5个→<span style="color:#e85070">冲顶校冷门专业</span> ·
-  6-25→<span style="color:#d97706">稳妥校对口专业</span> ·
-  26-80→<span style="color:#059669">保底校王牌专业</span>
+  <span style="color:#ff6b81">1-5 🌟许愿</span> 清北随便填 ·  ·
+  <span style="color:#e85070">6-30 📈冲刺捡漏</span> ·
+  <span style="color:#667eea">31-60 🎯核心录取</span> · <span style="color:#059669">61-80 🛡️保底</span>
 </div>
 <div v-if="results.length" class="action-bar">
   <span class="count">{{ filteredResults.length }} 所</span>
@@ -259,9 +259,9 @@ createApp({
 toggleSubject(s){const i=this.form.subjects.indexOf(s);if(i>=0)this.form.subjects.splice(i,1);else if(this.form.subjects.length<3)this.form.subjects.push(s)},
     doSearch(){
       if(!this.canSearch||!this.allSchools.length)return;this.userScore=this.form.score;this.searched=true;this.filter='all';this.searchText='';
-      let list=this.allSchools.filter(s=>{const g=s.predicted-this.form.score;return g<=15&&g>=-55});
+      let list=this.allSchools.filter(s=>{const g=s.predicted-this.form.score;return g<=45&&g>=-55});
       list.sort((a,b)=>b.predicted-a.predicted);
-      this.results=list.map(s=>{const gap=s.predicted-this.form.score,ag=Math.abs(gap);const gt=gap>10?'差'+gap+'分(找冷门专业)':gap>0?'差'+gap+'分(可冲刺)':gap>-5?'压线':gap>-15?'高'+ag+'分(稳妥)':'高'+ag+'分(保底)';const gc=gap>5?'gap-rush':gap>-10?'gap-stable':'gap-safe';const lv=gap>5?'rush':gap>-10?'stable':'safe';const hint=gap>10?'🎯冲冷门专业':gap>0?'📈可冲刺':gap>-5?'⚖️稳妥':'🛡️保底';const mn=Math.min(s.predicted,this.form.score)-15,mx=Math.max(s.predicted,this.form.score)+15,rg=mx-mn;const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;return{...s,level:lv,_showDorm:false,_showLife:false,fav:false,_gapText:gt,_gapCls:gc,_hint:hint,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm))}});
+      this.results=list.map(s=>{const gap=s.predicted-this.form.score,ag=Math.abs(gap);let gt,gc,lv,hint;if(gap>20){gt='差'+gap+'分';gc='gap-rush';lv='rush';hint='🌟许愿 1-5'}else if(gap>5){gt='差'+gap+'分';gc='gap-rush';lv='rush';hint='📈冲刺 6-30'}else if(gap>-10){gt=gap>-3?'压线':'高'+ag+'分';gc='gap-stable';lv='stable';hint='🎯核心 31-60'}else{gt='高'+ag+'分';gc='gap-safe';lv='safe';hint='🛡️保底 61-80'};const mn=Math.min(s.predicted,this.form.score)-15,mx=Math.max(s.predicted,this.form.score)+15,rg=mx-mn;const fp=((this.form.score-mn)/rg)*100,mm=((s.predicted-mn)/rg)*100;return{...s,level:lv,_showDorm:false,_showLife:false,fav:false,_gapText:gt,_gapCls:gc,_hint:hint,_fillPct:Math.min(98,Math.max(2,fp)),_midMark:Math.min(96,Math.max(4,mm))}});
     },
     openDetail(s){this.detail=s;document.body.style.overflow='hidden'},
     heroBg(s){const m={综合类:['#e8794b','#d4622e'],理工类:['#1e40af','#3b82f6'],师范类:['#059669','#34d399'],财经类:['#d97706','#f59e0b'],医药类:['#e11d48','#fb7185'],农林类:['#2d8c4a','#4ade80'],语言类:['#7c3aed','#f4a460'],艺术类:['#db2777','#f472b6']};const c=m[s.type]||['#e8794b','#d4622e'];return'linear-gradient(135deg,'+c[0]+','+c[1]+')'},
