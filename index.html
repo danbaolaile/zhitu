@@ -145,6 +145,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   <button class="search-btn" @click="doSearch" :disabled="!canSearch">🔍 开始智能匹配</button>
 </div>
 
+<div v-if="results.length" style="background:#fef9f4;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:.72rem;color:#6b7280;line-height:1.6">
+  💡 <strong style="color:#2d2420">80个志愿怎么填？</strong>
+  前5个→<span style="color:#e85070">冲顶校冷门专业</span> ·
+  6-25→<span style="color:#d97706">稳妥校对口专业</span> ·
+  26-80→<span style="color:#059669">保底校王牌专业</span>
+</div>
 <div v-if="results.length" class="action-bar">
   <span class="count">{{ filteredResults.length }} 所</span>
   <input class="search-input" v-model="searchText" placeholder="搜学校...">
